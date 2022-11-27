@@ -8,54 +8,76 @@ body {
     background-color: #F1F1F1;
 }
 
-.root {
-    width: 100%;
+.h-screen {
+    height: 100vh;
 }
 
-.df {
+.flex {
     display: flex;
 }
 
-.df_fww {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.fd_col {
+.flex-col {
     flex-direction: column;
 }
 
-.jc_c {
-    justify-content: center;
+.items-center {
+    align-items: center;
 }
 
-.jc_sb {
-    justify-content: space-between;
+.text-center {
+    text-align: center;
 }
 
-.jc_sa {
-    justify-content: space-around;
+.flex-1 {
+    flex: 1 1 0%;
 }
 
-.App {
-    width: 100%;
+.grid {
+    display: grid;
 }
 
-.container {
-    padding: 25px;
+.grid-rows-5 {
+    grid-template-rows: repeat(5, minmax(0, 1fr));
 }
 
-.block {
-    display: flex;
-    gap: 15px;
+.grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.border {
     border: 1px solid lightgray;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    padding: 25px;
 }
 
-a {
-    text-decoration: none;
-    color: black;
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.bg-white {
+    background-color: #ffffff;
+}
+
+.bg-skyblue {
+    background-color: lightskyblue;
+}
+
+.text-gray {
+    color: gray;
+}
+
+.text-white {
+    color: white;
+}
+
+.cursive {
+    font-family: cursive;
+    font-size: 0.8rem;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.calendar-day {
+    padding: 0.25rem;
+    margin: 0.25rem 0;
 }

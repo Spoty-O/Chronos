@@ -1,0 +1,9 @@
+{
+    "short_name": "chronos",
+    "name": "chronos",
+    "icons": [],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#F1F1F1"
+}

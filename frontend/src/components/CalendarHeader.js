@@ -10,10 +10,17 @@ export default function CalendarHeader() {
     function handleNextMonth() {
         setMonthIndex(monthIndex + 1);
     }
+    function handleTodayMonth() {
+        setMonthIndex(dayjs().month());
+    }
+
     return (
         <header className="flex items-center bg-white border gap-15 pxy-10">
             <h1 className="bold cursive">Chronos</h1>
-            <button className="border bg-white pxy-10 rounded-5 cursor-pointer bold cursive">
+            <button
+                className="border bg-white pxy-10 rounded-5 cursor-pointer bold cursive"
+                onClick={handleTodayMonth}
+            >
                 Today
             </button>
             <button

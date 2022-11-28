@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import GlobalContext from "../services/GlobalContext";
 
 export default function Day({ day, rowIdx }) {
-    const { setShowEventModal } = useContext(GlobalContext);
+    const { setShowEventModal, setDaySelected } = useContext(GlobalContext);
     function getCurrentDay() {
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
             ? "bg-skyblue text-white"
@@ -12,6 +12,10 @@ export default function Day({ day, rowIdx }) {
     return (
         <div
             className={`${getCurrentDay()} border flex flex-col cursor-pointer`}
+            onClick={() => {
+                setDaySelected(day);
+                setShowEventModal(true);
+            }}
         >
             <header className="flex flex-col items-center cursive text-08-rem bold">
                 {rowIdx === 0 && day.format("D") > 21 ? (
@@ -28,10 +32,7 @@ export default function Day({ day, rowIdx }) {
                     </>
                 )}
             </header>
-            <div
-                className="flex-1"
-                onClick={() => setShowEventModal(true)}
-            ></div>
+            <div className="flex-1"></div>
         </div>
     );
 }

@@ -48,6 +48,10 @@ body {
     border: 1px solid lightgray;
 }
 
+.border-none {
+    border: none;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -80,4 +84,40 @@ body {
 .calendar-day {
     padding: 0.25rem;
     margin: 0.25rem 0;
+}
+
+.text-20 {
+    font-size: 20px;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.px-10 {
+    padding: 0 10px;
+}
+
+.py-10 {
+    padding: 10px 0;
+}
+
+.pxy-10 {
+    padding: 10px;
+}
+
+.rounded-full {
+    border-radius: 50%;
+}
+
+.rounded-5 {
+    border-radius: 5px;
+}
+
+.rounded-10 {
+    border-radius: 10px;
 }

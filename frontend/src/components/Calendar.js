@@ -4,10 +4,11 @@ import Sidebar from "./Sidebar";
 import Month from "./Month";
 import GlobalContext from "../services/GlobalContext";
 import { getMonth, getWeek } from "../services/util";
+import EventModal from "./EventModal";
 
 export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(getMonth());
-    const { monthIndex } = useContext(GlobalContext);
+    const { monthIndex, showEventModal } = useContext(GlobalContext);
 
     useEffect(() => {
         setCurrentMonth(getMonth(monthIndex));
@@ -15,16 +16,19 @@ export default function Calendar() {
 
     return (
         <React.Fragment>
+            {showEventModal && <EventModal />}
             <div className="h-screen flex flex-col">
                 <CalendarHeader />
-                <div className="flex flex-1 flex-col">
+                <div className="flex flex-1">
                     <Sidebar />
-                    <div className="grid grid-cols-7 bg-white text-center cursive bold">
-                        {getWeek().map((item, idx) => (
-                            <p key={idx}>{item}</p>
-                        ))}
+                    <div className="flex flex-col flex-1">
+                        <div className="grid grid-cols-7 bg-white text-center cursive bold text-08-rem border">
+                            {getWeek().map((item, idx) => (
+                                <p key={idx}>{item}</p>
+                            ))}
+                        </div>
+                        <Month month={currentMonth} />
                     </div>
-                    <Month month={currentMonth} />
                 </div>
             </div>
         </React.Fragment>

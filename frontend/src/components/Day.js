@@ -11,7 +11,7 @@ export default function Day({ day, rowIdx }) {
     }
     return (
         <div
-            className={`${getCurrentDay()} border flex flex-col cursor-pointer`}
+            className={`${getCurrentDay()} day_item`}
             onClick={() => {
                 setDaySelected(day);
                 setShowEventModal(true);

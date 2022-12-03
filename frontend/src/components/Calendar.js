@@ -27,7 +27,9 @@ export default function Calendar() {
                                 <p key={idx}>{item}</p>
                             ))}
                         </div>
-                        <Month month={currentMonth} />
+                        <div className="flex flex-col flex-1">
+                            <Month month={currentMonth} />
+                        </div>
                     </div>
                 </div>
             </div>

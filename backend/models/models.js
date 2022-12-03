@@ -17,7 +17,8 @@ const Event = sequelize.define('event', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING, allowNull: false},
     description: {type: DataTypes.TEXT, allowNull: false},
-    date: {type: DataTypes.DATE, defaultValue: NOW},
+    date_start: {type: DataTypes.DATE, allowNull: false},
+    date_end: {type: DataTypes.DATE, allowNull: false},
     type: {type: DataTypes.ENUM('Arrangement', 'Reminder', 'Task'), allowNull: false}
 });
 

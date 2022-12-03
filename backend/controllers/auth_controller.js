@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'reed.mclaughlin43@ethereal.email',
-        pass: 'ZET74cNcFJCZ49YfYv'
+        user: 'ernie.luettgen@ethereal.email',
+        pass: 'umeNQq3MzxCpQEgrdm'
     }
 });
 
@@ -30,9 +30,9 @@ const send_mail = (path, email, jwt) => {
     });
 }
 
-const generateJwt = (id, login, time) => {
+const generateJwt = (id, login, time, key) => {
     return jwt.sign({ id, login },
-        process.env.SECRET_KEY,
+        key,
         { expiresIn: time }
     );
 }
@@ -41,7 +41,6 @@ class AuthController {
     async register(req, res, next) {
         try {
             const { login, password, password_conf, email } = req.body;
-            console.log(req.body)
             if (!login || !password || !password_conf || !email) {
                 return next(ApiError.badRequest("Некорректное поле!"));
             }
@@ -52,8 +51,7 @@ class AuthController {
                 return next(ApiError.badRequest("Пользователь уже существует!"));
             }
             const hashPassword = await bcrypt.hash(password, 5);
-            let user = await User.create({ login, password: hashPassword, email });
-            // send_mail('register', user.email, generateJwt(user.id, '', ''));
+            await User.create({ login, password: hashPassword, email });
             return res.json({ message: "Регистрация успешна!" });
         } catch (error) {
             console.log(error);
@@ -75,8 +73,8 @@ class AuthController {
             if (!bcrypt.compareSync(password, user.password)) {
                 return next(ApiError.badRequest("Неверные данные!"));
             }
-            const accessToken = generateJwt(user.id, user.login, '24h');
-            const newRefreshToken = generateJwt(user.id, user.login, '60s');
+            const accessToken = generateJwt(user.id, user.login, '24h', process.env.SECRET_KEY_ACCESS);
+            const newRefreshToken = generateJwt(user.id, user.login, '24h', process.env.SECRET_KEY_REFRESH); ///back time to 60s
             if (cookies?.token) {
                 res.clearCookie('token', {
                     secure: true,
@@ -122,10 +120,10 @@ class AuthController {
             }
             const user = await User.findOne({ where: { email } });
             if (!user) {
-                return next(ApiError.notFound());
+                return next(ApiError.badRequest());
             }
-            send_mail('password-reset', user.email, generateJwt(user.id, '', ''));
-            return res.json({ message: "Check email!" });
+            send_mail('password-reset', email, generateJwt(user.id, '', '900s', process.env.SECRET_KEY_REFRESH));
+            return res.json({ message: "Check email, link valid of 15 minutes!" });
         } catch (error) {
             console.log(error);
             return next(ApiError.internal());
@@ -142,10 +140,15 @@ class AuthController {
                 return next(ApiError.badRequest("Подтвердите пароль!"));
             }
             const { token } = req.params;
-            const { id } = jwt.verify(token, process.env.SECRET_KEY);
+            const info = jwt.verify(token, process.env.SECRET_KEY_REFRESH);
+            if (!info) {
+                return next(ApiError.badRequest());
+            }
             const hashPassword = await bcrypt.hash(new_password, 5);
-            const user = await User.update({ password: hashPassword }, { where: { id } });
-            if (!user) return next(ApiError.notFound("User does not exists"));
+            const user = await User.update({ password: hashPassword }, { where: { id: info.id } });
+            if (!user) {
+                return next(ApiError.notFound("User does not exists"));
+            }
             return res.json({ message: "Password changed!" });
         } catch (error) {
             console.log(error);
@@ -153,23 +156,16 @@ class AuthController {
         }
     }
 
-    async check(req, res, next) {
+    async handleRefreshToken(req, res, next) {
         try {
             const token = req.cookies.token;
             if (!token) return next(ApiError.notAuth());
             const { id, login } = jwt.verify(token, process.env.SECRET_KEY);
-            res.clearCookie('token', { httpOnly: true, sameSite: 'None', secure: true });
-            let user = await User.findOne({ where: { id } });
-            const jwt_token = generateJwt(
-                id,
-                login,
-            );
-            res.cookie("token", token, {
-                secure: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                httpOnly: true,
-                sameSite: 'None'
-            }); //24h
+            const user = await User.findOne({ where: { login, id } });
+            if (!user) {
+                return next(ApiError.notAuth("Пользователь не найден!"));
+            }
+            const jwt_token = generateJwt(user.id, user.login, '60s', process.env.SECRET_KEY_REFRESH);
             return res.json(jwt_token);
         } catch (error) {
             console.log(error);

@@ -50,12 +50,12 @@ export default function Month({ month }) {
                             {events.map((ev, index) =>
                                 console.log(
                                     row.findIndex((element) => {
-                                        console.log(typeof element.d);
+                                        console.log(element.format('DD/MM/YYYY'))
                                         console.log(
-                                            typeof dayjs(ev.DateFrom).d
+                                            dayjs(ev.DateFrom).format('DD/MM/YYYY')
                                         );
                                         console.log(
-                                            element.$d == dayjs(ev.DateFrom).$d
+                                            element.format('DD/MM/YYYY') == dayjs(ev.DateFrom).format('DD/MM/YYYY')
                                         );
                                         return (
                                             element.$d == dayjs(ev.DateFrom).$d

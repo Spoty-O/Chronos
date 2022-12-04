@@ -22,12 +22,16 @@ const Event = sequelize.define('event', {
     type: {type: DataTypes.ENUM('Arrangement', 'Reminder', 'Task'), allowNull: false}
 });
 
+const UserCalendar = sequelize.define('user_calendar', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+});
+
 const CalendarEvent = sequelize.define('calendar_event', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 });
 
-User.hasMany(Calendar);
-Calendar.belongsTo(User);
+User.belongsToMany(Calendar, {through: UserCalendar});
+Calendar.belongsToMany(User, {through: UserCalendar});
 
 Calendar.belongsToMany(Event, {through: CalendarEvent});
 Event.belongsToMany(Calendar, {through: CalendarEvent});

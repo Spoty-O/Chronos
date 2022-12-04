@@ -32,7 +32,6 @@ export default function Day({ day, rowIdx }) {
                     </>
                 )}
             </header>
-            <div className="flex-1"></div>
         </div>
     );
 }

@@ -9,6 +9,12 @@ const GlobalContext = React.createContext({
     setShowEventModal: () => {},
     selectedEvent: null,
     setSelectedEvent: () => {},
+    showCalendarModal: false,
+    setShowCalendarModal: () => {},
+    isCreateCalendar: false,
+    setIsCreateCalendar: () => {},
+    selectedCalendar: 0,
+    setSelectedCalendar: () => {},
 });
 
 export default GlobalContext;

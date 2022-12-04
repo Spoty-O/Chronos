@@ -7,6 +7,9 @@ export default function ContextWrapper(props) {
     const [daySelected, setDaySelected] = useState(dayjs());
     const [showEventModal, setShowEventModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [showCalendarModal, setShowCalendarModal] = useState(false);
+    const [selectedCalendar, setSelectedCalendar] = useState(null);
+    const [isCreateCalendar, setIsCreateCalendar] = useState(false);
 
     return (
         <GlobalContext.Provider
@@ -19,6 +22,12 @@ export default function ContextWrapper(props) {
                 setShowEventModal,
                 selectedEvent,
                 setSelectedEvent,
+                showCalendarModal,
+                setShowCalendarModal,
+                isCreateCalendar,
+                setIsCreateCalendar,
+                selectedCalendar,
+                setSelectedCalendar,
             }}
         >
             {props.children}

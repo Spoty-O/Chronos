@@ -160,7 +160,7 @@ class AuthController {
         try {
             const token = req.cookies.token;
             if (!token) return next(ApiError.notAuth());
-            const { id, login } = jwt.verify(token, process.env.SECRET_KEY);
+            const { id, login } = jwt.verify(token, process.env.SECRET_KEY_ACCESS);
             const user = await User.findOne({ where: { login, id } });
             if (!user) {
                 return next(ApiError.notAuth("Пользователь не найден!"));

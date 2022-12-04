@@ -11,16 +11,18 @@ const AuthForm = () => {
     const location = useLocation();
     const pageType = location.pathname;
 
-    const [loginUser, { error: loginError }] = API.useLoginUserMutation();
+    const [loginUser, { error: loginError }] = API.useLoginMutation();
     const [registerUser, { data: registerData, error: registerError }] =
-        API.useRegisterUserMutation();
-    const [forgotUser, { error: forgotError }] = API.useForgotUserMutation();
+        API.useRegisterMutation();
+    const [forgotUser, { error: forgotError }] = API.usePasswordResetMutation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (pageType === "/login") {
+            console.log(await new FormData(e.target));
             let res = await loginUser(new FormData(e.target));
+            console.log(res);
             dispatch(setCredentials(res));
         } else if (pageType === "/register") {
             await registerUser(new FormData(e.target));
@@ -66,7 +68,7 @@ const AuthForm = () => {
                                 required
                             />
                         </div>
-                        {pageType !== "/register" ? (
+                        {pageType === "/register" ? (
                             <div className="input-section">
                                 <input
                                     className="input-area"

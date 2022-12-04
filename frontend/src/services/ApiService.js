@@ -18,7 +18,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (result?.error?.status === 401) {
         console.log("sending refresh token");
         const refreshResult = await baseQuery(
-            "/auth/refresh",
+            "/auth/refresh-token",
             api,
             extraOptions
         );
@@ -35,28 +35,41 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const API = createApi({
     reducerPath: "API",
     baseQuery: baseQueryWithReauth,
-    tagTypes: ["Auth", "Event"],
+    tagTypes: ["Auth", "Event", "Calendar"],
     endpoints: (build) => ({
         // auth
-        refreshUser: build.query({
-            query: () => ({
-                url: "/auth/whoami",
-            }),
-            invalidatesTags: ["User", "Post", "Comment"],
-        }),
-        loginUser: build.mutation({
+        login: build.mutation({
             query: (data) => ({
                 url: "/auth/login",
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: ["Post", "Comment", "User"],
+            invalidatesTags: ["Event"],
         }),
-        registerUser: build.mutation({
+        register: build.mutation({
             query: (data) => ({
                 url: `/auth/register`,
                 method: "POST",
                 body: data,
+            }),
+        }),
+        passwordReset: build.mutation({
+            query: (data) => ({
+                url: `/auth/password-reset`,
+                method: "POST",
+                body: data,
+            }),
+        }),
+        passwordResetConfirm: build.mutation({
+            query: (data) => ({
+                url: `/auth/password-reset/${data.id}`,
+                method: "POST",
+            }),
+        }),
+        passwordConfirm: build.mutation({
+            query: (data) => ({
+                url: `/auth/password-confirm/${data.id}`,
+                method: "POST",
             }),
         }),
         logoutUser: build.mutation({
@@ -64,35 +77,66 @@ export const API = createApi({
                 url: "/auth/logout",
                 method: "POST",
             }),
-            invalidatesTags: ["Post", "Comment", "User"],
+            invalidatesTags: ["Event", "Calendar"],
         }),
 
         // events
-        fetchAllEvents: build.query({
-            query: () => ({
+        getEvents: build.query({
+            query: ({ id, date_start, date_end }) => ({
                 url: `/event`,
+                params: {
+                    id: id,
+                    date_start: date_start,
+                    date_end: date_end,
+                },
             }),
             providesTags: (result) => [{ type: "Event" }],
         }),
-        fetchOneEvent: build.query({
-            query: (id) => ({
+        getShareEventLink: build.query({
+            query: ({ id }) => ({
                 url: `/event/${id}`,
             }),
             providesTags: (result) => [{ type: "Event" }],
         }),
         createEvent: build.mutation({
-            query: (data) => ({
-                url: `/event`,
+            query: ({
+                id,
+                title,
+                description,
+                date_start,
+                date_end,
+                type,
+            }) => ({
+                url: `/event/${id}`,
                 method: "POST",
-                body: data,
+                body: {
+                    title,
+                    description,
+                    date_start,
+                    date_end,
+                    type,
+                },
             }),
             invalidatesTags: ["Event"],
         }),
         updateEvent: build.mutation({
-            query: ({ id, content }) => ({
+            query: ({
+                id,
+                title,
+                description,
+                date_start,
+                date_end,
+                type,
+            }) => ({
                 url: `/event/${id}`,
                 method: "PATCH",
-                body: { content },
+                body: {
+                    title,
+                    description,
+                    date_start,
+                    date_end,
+                    type,
+                },
             }),
             invalidatesTags: ["Event"],
         }),
@@ -102,6 +146,47 @@ export const API = createApi({
                 method: "DELETE",
             }),
             invalidatesTags: ["Event"],
+        }),
+
+        // calendar
+        getCalendars: build.query({
+            query: () => ({
+                url: `/calendar`,
+            }),
+            providesTags: (result) => [{ type: "Calendar" }],
+        }),
+        getShareCalendarLink: build.query({
+            query: ({ id }) => ({
+                url: `/calendar/${id}`,
+            }),
+            providesTags: (result) => [{ type: "Calendar" }],
+        }),
+        createCalendar: build.mutation({
+            query: ({ id, title }) => ({
+                url: `/calendar/${id}`,
+                method: "POST",
+                body: {
+                    title,
+                },
+            }),
+            invalidatesTags: ["Calendar"],
+        }),
+        updateCalendar: build.mutation({
+            query: ({ id, title }) => ({
+                url: `/calendar/${id}`,
+                method: "PATCH",
+                body: {
+                    title,
+                },
+            }),
+            invalidatesTags: ["Calendar"],
+        }),
+        deleteCalendar: build.mutation({
+            query: (data) => ({
+                url: `/calendar/${data.id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Calendar"],
         }),
     }),
 });

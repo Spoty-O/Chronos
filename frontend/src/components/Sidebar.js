@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import GlobalContext from "../services/GlobalContext";
+import { API } from "../services/ApiService";
 
 let calendars = [
     { title: "calendar1", link: "copylink1" },
@@ -15,6 +16,8 @@ export default function Sidebar() {
         selectedCalendar,
     } = useContext(GlobalContext);
 
+    const { data: calendar, isLoading, error } = API.useGetCalendarsQuery();
+    console.log(calendar, error);
     return (
         <aside className="aside">
             <button

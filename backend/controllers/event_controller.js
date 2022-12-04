@@ -104,7 +104,7 @@ class EventController {
             if (events.length < 2) {
                 await event.destroy();
             } else {
-                await calendar.removeCalendar(event);
+                await calendar.removeEvent(event);
             }
             return res.json({ message: "Event deleted!" });
         } catch (error) {

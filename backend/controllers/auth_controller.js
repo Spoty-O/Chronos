@@ -95,7 +95,7 @@ class AuthController {
         }
     }
 
-    async logout(req, res) {
+    async logout(req, res, next) {
         try {
             const cookies = req.cookies;
             if (cookies?.token) {
@@ -112,7 +112,7 @@ class AuthController {
         }
     }
 
-    async password_reset(req, res) {
+    async password_reset(req, res, next) {
         try {
             const { email } = req.body;
             if (!email) {
@@ -130,7 +130,7 @@ class AuthController {
         }
     }
 
-    async password_confirm(req, res) {
+    async password_confirm(req, res, next) {
         try {
             const { new_password, password_conf } = req.body;
             if (!new_password || !password_conf) {

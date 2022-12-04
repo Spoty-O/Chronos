@@ -40,7 +40,7 @@ export const API = createApi({
     endpoints: (build) => ({
         getRefreshToken: build.query({
             query: () => ({
-                url: `/auth/refresh-token`,
+                url: `/auth/refresh`,
             }),
             providesTags: (result) => [{ type: ["Auth", "Calendar"] }],
         }),
@@ -70,8 +70,9 @@ export const API = createApi({
         }),
         passwordResetConfirm: build.mutation({
             query: (data) => ({
-                url: `/auth/password-reset/${data.id}`,
+                url: `/auth/password-reset/${data.token}`,
                 method: "POST",
+                body: data.data,
             }),
         }),
         passwordConfirm: build.mutation({

@@ -11,8 +11,7 @@ const AuthForm = () => {
     const location = useLocation();
     const pageType = location.pathname;
 
-    let { data, error } = API.useGetRefreshTokenQuery();
-    console.log(data, error)
+    API.useGetRefreshTokenQuery();
 
     const [loginUser, { error: loginError }] = API.useLoginMutation();
     const [registerUser, { data: registerData, error: registerError }] =
@@ -35,8 +34,6 @@ const AuthForm = () => {
 
     return (
         <div className="auth">
-            {data && data}
-            {error && error}
             <form className="login-box" onSubmit={handleSubmit}>
                 <h1 className="auth-logo cursive bold">Chronos</h1>
                 {pageType !== "/forgot" ? (

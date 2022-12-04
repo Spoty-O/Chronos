@@ -4,6 +4,7 @@ import AuthForm from "./components/AuthForm";
 import { useSelector } from "react-redux";
 import Calendar from "./components/Calendar";
 import ContextWrapper from "./services/ContextWrapper";
+import ForgotForm from "./components/Forgot";
 
 function App() {
     let { isAuth } = useSelector((state) => state.auth);
@@ -55,6 +56,18 @@ function App() {
                                     <Navigate to="/main" />
                                 ) : (
                                     <AuthForm />
+                                )}
+                            </ContextWrapper>
+                        }
+                    />
+                    <Route
+                        path="/password-reset/:jwt"
+                        element={
+                            <ContextWrapper>
+                                {isAuth ? (
+                                    <Navigate to="/main" />
+                                ) : (
+                                    <ForgotForm />
                                 )}
                             </ContextWrapper>
                         }

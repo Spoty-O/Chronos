@@ -9,7 +9,7 @@ export default function Sidebar() {
         setSelectedCalendar,
         selectedCalendar,
     } = useContext(GlobalContext);
-    
+
     const { data: calendars, error } = API.useGetCalendarsQuery();
     return (
         <aside className="aside">
@@ -26,22 +26,39 @@ export default function Sidebar() {
                 <span className="cursive text-center border-bottom">
                     Calendars:
                 </span>
-                {calendars && calendars.map((item, index) => (
-                    <div
-                        className={`${
-                            selectedCalendar && selectedCalendar.id === item.id ? "active" : ""
-                        } list-item`}
-                        key={index}
-                        onContextMenu={(e) => {
-                            e.preventDefault();
-                            setShowCalendarModal(true);
-                            setSelectedCalendar(item);
-                        }}
-                        onClick={() => setSelectedCalendar(item)}
-                    >
-                        {item.title}
-                    </div>
-                ))}
+                {calendars &&
+                    calendars.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`${
+                                selectedCalendar &&
+                                selectedCalendar.id === item.id
+                                    ? "active"
+                                    : ""
+                            } list-item`}
+                        >
+                            <div
+                                className="flex-1 text-center"
+                                onContextMenu={(e) => {
+                                    e.preventDefault();
+                                    setShowCalendarModal(true);
+                                    setSelectedCalendar(item);
+                                }}
+                                onClick={() => setSelectedCalendar(item)}
+                            >
+                                {item.title}
+                            </div>
+                            <div
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setShowCalendarModal(true);
+                                    setSelectedCalendar(item);
+                                }}
+                            >
+                                <span>&#x270E;</span>
+                            </div>
+                        </div>
+                    ))}
             </div>
             <div className="lists">
                 <span className="cursive text-center border-bottom">

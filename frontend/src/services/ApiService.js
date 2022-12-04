@@ -172,9 +172,12 @@ export const API = createApi({
         }),
         createCalendar: build.mutation({
             query: (data) => ({
-                url: `/calendar/`,
+                url: `/calendar`,
                 method: "POST",
-                body: data,
+                body: data.data,
+                params: {
+                    id: data.id,
+                },
             }),
             invalidatesTags: ["Calendar"],
         }),

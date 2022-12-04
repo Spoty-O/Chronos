@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Calendar from "./components/Calendar";
 import ContextWrapper from "./services/ContextWrapper";
 import ForgotForm from "./components/Forgot";
+import ShareCalendar from "./components/ShareCalendar";
 
 function App() {
     let { isAuth } = useSelector((state) => state.auth);
@@ -57,6 +58,14 @@ function App() {
                                 ) : (
                                     <AuthForm />
                                 )}
+                            </ContextWrapper>
+                        }
+                    />
+                    <Route
+                        path="/share-calendar/:id"
+                        element={
+                            <ContextWrapper>
+                                {isAuth ? <ShareCalendar /> : <AuthForm />}
                             </ContextWrapper>
                         }
                     />

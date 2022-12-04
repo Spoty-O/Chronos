@@ -1,6 +1,6 @@
 import React from "react";
 import "./Styles/AuthForm.css";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { API } from "../services/ApiService";
 import { setCredentials } from "../services/AuthSlice";
 import { useDispatch } from "react-redux";

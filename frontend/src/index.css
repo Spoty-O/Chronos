@@ -310,8 +310,9 @@ body {
 
 .aside .lists .list-item {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding: 10px;
+    align-items: center;
 }
 
 .aside .lists .list-item:hover {

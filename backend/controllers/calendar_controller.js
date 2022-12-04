@@ -37,9 +37,11 @@ class CalendarController {
             if (!user) {
                 return next(ApiError.notFound("Пользователь не найден!"));
             }
-            if (req.params.id) {
-                if (!user.hasCalendar({ where: { id: req.params.id } })) {
-                    await user.addCalendar({ where: { id: req.params.id } });
+            if (req.query.id) {
+                const id = new Number(req.query.id)
+                console.log(typeof id)
+                if (!await user.hasCalendar({ where: { id:id } })) {
+                    await user.addCalendar({ where: { id:id } });
                     message = 'Add success!'
                 } else {
                     message = 'Calendar was already added!'
@@ -54,7 +56,7 @@ class CalendarController {
             }
             return res.json({ message });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             return next(ApiError.internal("Create calendar error!"));
         }
     }

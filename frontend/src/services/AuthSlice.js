@@ -6,8 +6,7 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             if (action.payload && action.payload.data) {
-                const { token } = action.payload.data;
-                state.token = token;
+                state.token = action.payload.data;
                 state.isAuth = true;
             } else {
                 state.isAuth = false;

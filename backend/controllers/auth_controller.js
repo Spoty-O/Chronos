@@ -169,7 +169,7 @@ class AuthController {
             return res.json(jwt_token);
         } catch (error) {
             console.log(error);
-            return next(ApiError.internal());
+            return next(ApiError.notAuth());
         }
     }
 }

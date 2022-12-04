@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token;
-        console.log(getState())
+        console.log(getState());
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
@@ -38,6 +38,13 @@ export const API = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ["Auth", "Event", "Calendar"],
     endpoints: (build) => ({
+        getRefreshToken: build.query({
+            query: () => ({
+                url: `/auth/refresh-token`,
+            }),
+            providesTags: (result) => [{ type: ["Auth", "Calendar"] }],
+        }),
+
         // auth
         login: build.mutation({
             query: (data) => ({

@@ -1,9 +1,21 @@
 import dayjs from "dayjs";
 import React, { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { API } from "../services/ApiService";
+import { logOut } from "../services/AuthSlice";
 import GlobalContext from "../services/GlobalContext";
 
 export default function Header() {
     const { monthIndex, setMonthIndex } = useContext(GlobalContext);
+    const dispatch = useDispatch();
+
+    const [logoutUser] = API.useLogoutUserMutation();
+    const logoutFunc = async (e) => {
+        e.stopPropagation();
+        await logoutUser();
+        dispatch(logOut());
+    };
+
     function handlePrevMonth() {
         setMonthIndex(monthIndex - 1);
     }
@@ -39,7 +51,7 @@ export default function Header() {
                     )}
                 </h3>
             </div>
-            <button className="button">Logout</button>
+            <button className="button" onClick={logoutFunc}>Logout</button>
         </header>
     );
 }

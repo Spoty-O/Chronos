@@ -20,7 +20,6 @@ const AuthForm = () => {
         e.preventDefault();
 
         if (pageType === "/login") {
-            console.log(await new FormData(e.target));
             let res = await loginUser(new FormData(e.target));
             console.log(res);
             dispatch(setCredentials(res));
@@ -73,7 +72,7 @@ const AuthForm = () => {
                                 <input
                                     className="input-area"
                                     type="password"
-                                    name="conf_password"
+                                    name="password_conf"
                                     placeholder="Password confirm"
                                     required
                                 />

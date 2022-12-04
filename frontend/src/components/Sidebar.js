@@ -2,12 +2,6 @@ import React, { useContext } from "react";
 import GlobalContext from "../services/GlobalContext";
 import { API } from "../services/ApiService";
 
-let calendars = [
-    { title: "calendar1", link: "copylink1" },
-    { title: "calendar2", link: "copylink2" },
-    { title: "calendar3", link: "copylink3" },
-];
-
 export default function Sidebar() {
     const {
         setShowCalendarModal,
@@ -15,9 +9,8 @@ export default function Sidebar() {
         setSelectedCalendar,
         selectedCalendar,
     } = useContext(GlobalContext);
-
-    const { data: calendar, isLoading, error } = API.useGetCalendarsQuery();
-    console.log(calendar, error);
+    
+    const { data: calendars, error } = API.useGetCalendarsQuery();
     return (
         <aside className="aside">
             <button
@@ -33,10 +26,10 @@ export default function Sidebar() {
                 <span className="cursive text-center border-bottom">
                     Calendars:
                 </span>
-                {calendars.map((item, index) => (
+                {calendars && calendars.map((item, index) => (
                     <div
                         className={`${
-                            selectedCalendar === index ? "active" : ""
+                            selectedCalendar && selectedCalendar.id === item.id ? "active" : ""
                         } list-item`}
                         key={index}
                         onContextMenu={(e) => {
@@ -44,7 +37,7 @@ export default function Sidebar() {
                             setShowCalendarModal(true);
                             setSelectedCalendar(item);
                         }}
-                        onClick={() => setSelectedCalendar(index)}
+                        onClick={() => setSelectedCalendar(item)}
                     >
                         {item.title}
                     </div>

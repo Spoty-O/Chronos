@@ -1,22 +1,12 @@
 import React, { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
+import { API } from "../services/ApiService";
 import GlobalContext from "../services/GlobalContext";
 
-export default function CalendarModal() {
-    const {
-        setShowCalendarModal,
-        selectedCalendar,
-        setSelectedCalendar,
-        isCreateCalendar,
-        setIsCreateCalendar,
-    } = useContext(GlobalContext);
-
-    console.log(isCreateCalendar, selectedCalendar);
-    const [title, setTitle] = useState(
-        selectedCalendar ? selectedCalendar.title : ""
-    );
+function ShareLink({ id }) {
+    const { data, error } = API.useGetShareCalendarLinkQuery(id);
     const [isCopied, setIsCopied] = useState(false);
 
-    // This is the function we wrote earlier
     async function copyTextToClipboard(text) {
         if ("clipboard" in navigator) {
             return await navigator.clipboard.writeText(text);
@@ -25,12 +15,9 @@ export default function CalendarModal() {
         }
     }
 
-    // onClick handler function for the copy button
-    const handleCopyClick = () => {
-        // Asynchronously call copyTextToClipboard
-        copyTextToClipboard(selectedCalendar.link)
+    const handleCopyClick = async () => {
+        copyTextToClipboard(data.link)
             .then(() => {
-                // If successful, update the isCopied state value
                 setIsCopied(true);
                 setTimeout(() => {
                     setIsCopied(false);
@@ -42,8 +29,69 @@ export default function CalendarModal() {
     };
 
     return (
+        <>
+            {data && (
+                <div className="flex justify-between text-blue bold text-12">
+                    <span className="cursor-pointer" onClick={handleCopyClick}>
+                        Copy share link
+                    </span>
+                    <span className="text-black">{isCopied && "Copied!"}</span>
+                </div>
+            )}
+        </>
+    );
+}
+
+export default function CalendarModal() {
+    const dispatch = useDispatch();
+    const {
+        setShowCalendarModal,
+        selectedCalendar,
+        setSelectedCalendar,
+        isCreateCalendar,
+        setIsCreateCalendar,
+    } = useContext(GlobalContext);
+
+    // console.log(isCreateCalendar, selectedCalendar);
+    const [title, setTitle] = useState(
+        selectedCalendar ? selectedCalendar.title : ""
+    );
+
+    const [
+        createCalendar,
+        { data: createCalendarData, error: createCalendarError },
+    ] = API.useCreateCalendarMutation();
+    const [updateCalendar, { error: updateCalendarError }] =
+        API.useUpdateCalendarMutation();
+    const [deleteCalendar] = API.useDeleteCalendarMutation();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (isCreateCalendar) {
+            await createCalendar(new FormData(e.target));
+        } else {
+            console.log(selectedCalendar.id);
+            await updateCalendar({
+                id: selectedCalendar.id,
+                data: new FormData(e.target),
+            });
+        }
+    };
+
+    const handleRemove = async (e) => {
+        e.preventDefault();
+        console.log(selectedCalendar);
+        if (window.confirm(`Are you sure?`)) {
+            let res = await deleteCalendar(selectedCalendar.id);
+            setShowCalendarModal(false);
+            setIsCreateCalendar(false);
+            setSelectedCalendar(null);
+        }
+    };
+
+    return (
         <div className="modal">
-            <form className="modal__form cursive">
+            <form className="modal__form cursive" onSubmit={handleSubmit}>
                 <header className="bg-gray flex justify-between items-center pxy-15">
                     <span>Calendar</span>
                     <span
@@ -65,29 +113,32 @@ export default function CalendarModal() {
                         required
                         className="text-gray cursive"
                     />
-                    {!isCreateCalendar ? (
-                        <div className="flex justify-between text-blue bold text-12">
-                            <span
-                                className="cursor-pointer"
-                                onClick={handleCopyClick}
-                            >
-                                Copy share link
-                            </span>
-                            <span className="text-black">
-                                {isCopied && "Copied!"}
-                            </span>
-                        </div>
+                    {!isCreateCalendar && selectedCalendar ? (
+                        <ShareLink id={selectedCalendar.id} />
                     ) : (
                         ""
                     )}
                     {!isCreateCalendar ? (
                         <div className="flex justify-between">
                             <button className="button">update</button>
-                            <button className="button">delete</button>
+                            <button className="button" onClick={handleRemove}>
+                                delete
+                            </button>
                         </div>
                     ) : (
                         <button className="button">save</button>
                     )}
+                    {createCalendarData && (
+                        <span style={{ color: "green" }}>
+                            {createCalendarData.message}
+                        </span>
+                    )}
+
+                    <div id="error-box">
+                        {createCalendarError &&
+                            createCalendarError.data &&
+                            createCalendarError.data.message}
+                    </div>
                 </div>
             </form>
         </div>

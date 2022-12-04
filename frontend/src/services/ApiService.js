@@ -165,34 +165,30 @@ export const API = createApi({
             providesTags: (result) => [{ type: "Calendar" }],
         }),
         getShareCalendarLink: build.query({
-            query: ({ id }) => ({
-                url: `/calendar/${id}`,
+            query: (id) => ({
+                url: `/calendar/link/${id}`,
             }),
             providesTags: (result) => [{ type: "Calendar" }],
         }),
         createCalendar: build.mutation({
-            query: ({ id, title }) => ({
-                url: `/calendar/${id}`,
+            query: (data) => ({
+                url: `/calendar/`,
                 method: "POST",
-                body: {
-                    title,
-                },
+                body: data,
             }),
             invalidatesTags: ["Calendar"],
         }),
         updateCalendar: build.mutation({
-            query: ({ id, title }) => ({
-                url: `/calendar/${id}`,
+            query: (data) => ({
+                url: `/calendar/${data.id}`,
                 method: "PATCH",
-                body: {
-                    title,
-                },
+                body: data.data,
             }),
             invalidatesTags: ["Calendar"],
         }),
         deleteCalendar: build.mutation({
-            query: (data) => ({
-                url: `/calendar/${data.id}`,
+            query: (id) => ({
+                url: `/calendar/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Calendar"],

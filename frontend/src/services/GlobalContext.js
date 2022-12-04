@@ -13,7 +13,7 @@ const GlobalContext = React.createContext({
     setShowCalendarModal: () => {},
     isCreateCalendar: false,
     setIsCreateCalendar: () => {},
-    selectedCalendar: 0,
+    selectedCalendar: null,
     setSelectedCalendar: () => {},
 });
 

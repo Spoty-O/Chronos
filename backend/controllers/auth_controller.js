@@ -140,9 +140,11 @@ class AuthController {
                 return next(ApiError.badRequest("Подтвердите пароль!"));
             }
             const { token } = req.params;
-            const info = jwt.verify(token, process.env.SECRET_KEY_REFRESH);
-            if (!info) {
-                return next(ApiError.badRequest());
+            let info;
+            try {
+                info = jwt.verify(token, process.env.SECRET_KEY_REFRESH);
+            } catch (e) {
+                return next(ApiError.badRequest("link expired"));
             }
             const hashPassword = await bcrypt.hash(new_password, 5);
             const user = await User.update({ password: hashPassword }, { where: { id: info.id } });

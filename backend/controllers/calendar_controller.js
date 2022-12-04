@@ -33,15 +33,18 @@ class CalendarController {
     async create_calendar(req, res, next) {
         try {
             const user = await User.findOne({ where: { id: req.user.id } });
-            let message = '';
             if (!user) {
                 return next(ApiError.notFound("Пользователь не найден!"));
             }
+            let message = '';
             if (req.query.id) {
-                const id = new Number(req.query.id)
-                console.log(typeof id)
-                if (!await user.hasCalendar({ where: { id:id } })) {
-                    await user.addCalendar({ where: { id:id } });
+                const id = +req.query.id;
+                const calendar = await Calendar.findOne({ where: { id } });
+                if (!calendar) {
+                    return next(ApiError.notFound("Календарь не найден!"));
+                }
+                if (!await user.hasCalendar(calendar)) {
+                    await user.addCalendar(calendar);
                     message = 'Add success!'
                 } else {
                     message = 'Calendar was already added!'
@@ -56,7 +59,7 @@ class CalendarController {
             }
             return res.json({ message });
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             return next(ApiError.internal("Create calendar error!"));
         }
     }

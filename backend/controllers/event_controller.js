@@ -48,9 +48,14 @@ class EventController {
             if (!calendar) {
                 return next(ApiError.notFound("Calendar not found!"));
             }
-            if (req.params.event_id) {
-                if (!calendar.hasEvent({ where: { id: req.params.event_id } })) {
-                    await calendar.addEvent({ where: { id: req.params.event_id } });
+            if (req.query.event_id) {
+                const event_id = +req.query.event_id;
+                const event = await Event.findOne({ where: { id: event_id } });
+                if (!event) {
+                    return next(ApiError.notFound("Событие не найдено!"));
+                }
+                if (!calendar.hasEvent(event)) {
+                    await calendar.addEvent(event);
                     message = 'Add success!'
                 } else {
                     message = 'Event was already added!'

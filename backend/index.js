@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const bodyParser = require('body-parser');
 const router = require('./routes/index');
-const ErrorHandler = require('../../usof/backend/middleware/ErrorHandler');
+const ErrorHandler = require('./middleware/ErrorHandler');
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || "localhost";

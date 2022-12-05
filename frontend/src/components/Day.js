@@ -12,10 +12,14 @@ function EventsArray(events, date) {
 }
 
 export default function Day({ day, rowIdx, events }) {
-    const { setShowEventModal, setDaySelected, setIsCreateEvent } =
-        useContext(GlobalContext);
+    const {
+        setShowEventModal,
+        setDaySelected,
+        setIsCreateEvent,
+        setSelectedEvent,
+    } = useContext(GlobalContext);
 
-    console.log(events);
+    // console.log(events);
     function getCurrentDay() {
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
             ? "bg-skyblue text-white"
@@ -49,7 +53,16 @@ export default function Day({ day, rowIdx, events }) {
             </header>
             {events &&
                 EventsArray(events, day).map((item, index) => (
-                    <div className="event_item" key={index}>
+                    <div
+                        className="event_item"
+                        key={index}
+                        onClick={(e) => {
+                            setDaySelected(day);
+                            setShowEventModal(true);
+                            setIsCreateEvent(false);
+                            setSelectedEvent(item);
+                        }}
+                    >
                         {item.title}
                     </div>
                 ))}

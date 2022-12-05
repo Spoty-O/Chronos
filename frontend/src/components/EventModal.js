@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { API } from "../services/ApiService";
 import GlobalContext from "../services/GlobalContext";
 import MaterialUIPickers from "./Date";
@@ -22,6 +22,10 @@ export default function EventModal() {
 
     const [createEvent, { error: createEventError }] =
         API.useCreateEventMutation();
+    const [updateEvent, { error: updateEventError }] =
+        API.useUpdateEventMutation();
+    const [deleteEvent, { error: deleteEventError }] =
+        API.useDeleteEventMutation();
 
     const [title, setTitle] = useState(
         selectedEvent ? selectedEvent.title : ""
@@ -39,7 +43,15 @@ export default function EventModal() {
     const [valueStart, setValueStart] = useState(
         dayjs(daySelected).startOf("D")
     );
+
     const [valueEnd, setValueEnd] = useState(dayjs(daySelected).endOf("D"));
+
+    useEffect(() => {
+        if (selectedEvent) {
+            setValueStart(selectedEvent.date_start);
+            setValueEnd(selectedEvent.date_end);
+        }
+    }, [selectedEvent]);
 
     const handleChangeStart = (newValue) => {
         setValueStart(newValue);
@@ -61,11 +73,18 @@ export default function EventModal() {
                 data: data,
             });
         } else {
-            // console.log(selectedCalendar.id);
-            // await updateCalendar({
-            //     id: selectedCalendar.id,
-            //     data: new FormData(e.target),
-            // });
+            await updateEvent({
+                id: selectedEvent.id,
+                data: data,
+            });
+        }
+    };
+
+    const handleRemove = async (e) => {
+        e.preventDefault();
+        if (window.confirm(`Are you sure?`)) {
+            let res = await deleteEvent(selectedCalendar.id);
+            setShowEventModal(false);
         }
     };
 
@@ -128,9 +147,19 @@ export default function EventModal() {
                             </span>
                         ))}
                     </div>
-                    <button className="text-15">
-                        {isCreateEvent ? "save" : "update"}
-                    </button>
+                    <div className="flex justify-between gap-20">
+                        <button className="button flex-1">
+                            {isCreateEvent ? "create" : "update"}
+                        </button>
+                        {!isCreateEvent && (
+                            <button
+                                className="button flex-1"
+                                onClick={handleRemove}
+                            >
+                                delete
+                            </button>
+                        )}
+                    </div>
                     {createEventError && (
                         <div id="error-box">
                             {createEventError.data &&

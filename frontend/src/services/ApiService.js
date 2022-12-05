@@ -116,23 +116,10 @@ export const API = createApi({
             invalidatesTags: ["Event"],
         }),
         updateEvent: build.mutation({
-            query: ({
-                id,
-                title,
-                description,
-                date_start,
-                date_end,
-                type,
-            }) => ({
-                url: `/event/${id}`,
+            query: (data) => ({
+                url: `/event/${data.id}`,
                 method: "PATCH",
-                body: {
-                    title,
-                    description,
-                    date_start,
-                    date_end,
-                    type,
-                },
+                body: data.data,
             }),
             invalidatesTags: ["Event"],
         }),

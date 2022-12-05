@@ -20,8 +20,8 @@ function EventsArray(events, date) {
 function HolidaysArray(events, date) {
     return events.filter((item) => {
         return (
-            new Date(dayjs(item.date).set('year', 2022)).getTime() <= new Date(date).getTime() &&
-            new Date(date).getTime() <= new Date(dayjs(item.observed).set('year', 2022)).getTime()
+            new Date(dayjs(item.date).set('year', new Date(date).getFullYear())).getTime() <= new Date(date).getTime() &&
+            new Date(date).getTime() <= new Date(dayjs(item.observed).set('year', new Date(date).getFullYear())).getTime()
         );
     });
 }

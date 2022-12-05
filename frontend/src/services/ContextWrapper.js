@@ -11,6 +11,10 @@ export default function ContextWrapper(props) {
     const [selectedCalendar, setSelectedCalendar] = useState(null);
     const [isCreateCalendar, setIsCreateCalendar] = useState(false);
     const [isCreateEvent, setIsCreateEvent] = useState(false);
+    const [isHolidays, setIsHolidays] = useState(true);
+    const [isArrangement, setIsArrangement] = useState(true);
+    const [isReminder, setIsReminder] = useState(true);
+    const [isTask, setIsTask] = useState(true);
 
     return (
         <GlobalContext.Provider
@@ -31,6 +35,14 @@ export default function ContextWrapper(props) {
                 setSelectedCalendar,
                 isCreateEvent,
                 setIsCreateEvent,
+                isHolidays,
+                setIsHolidays,
+                isArrangement,
+                setIsArrangement,
+                isReminder,
+                setIsReminder,
+                isTask,
+                setIsTask,
             }}
         >
             {props.children}

@@ -8,8 +8,16 @@ export default function Sidebar() {
         setIsCreateCalendar,
         setSelectedCalendar,
         selectedCalendar,
+        isHolidays,
+        setIsHolidays,
+        isArrangement,
+        setIsArrangement,
+        isReminder,
+        setIsReminder,
+        isTask,
+        setIsTask,
     } = useContext(GlobalContext);
-
+    console.log(isHolidays)
     const { data: calendars, error } = API.useGetCalendarsQuery();
     return (
         <aside className="aside">
@@ -66,12 +74,13 @@ export default function Sidebar() {
                 <span className="cursive text-center border-bottom">
                     Events:
                 </span>
-                <div className="flex flex-col pxy-15 gap-15">
+                <div className="flex flex-col pxy-15">
                     <label className="label">
                         <input
                             type="checkbox"
                             className="event_checkbox"
                             name="holidays"
+                            // {isHolidays && checked}
                         />
                         <span>Holidays</span>
                     </label>

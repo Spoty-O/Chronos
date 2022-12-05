@@ -2,24 +2,6 @@ import dayjs from "dayjs";
 import React, { useContext } from "react";
 import GlobalContext from "../services/GlobalContext";
 
-// const events = [
-//     {
-//         title: "11",
-//         date_start: "Wed Dec 21 2022 00:00:00 GMT+0200",
-//         date_end: "Sat Dec 24 2022 00:00:00 GMT+0200",
-//     },
-//     {
-//         title: "22",
-//         date_start: "Tue Dec 13 2022 00:00:00 GMT+0200",
-//         date_end: "TWed Dec 21 2022 00:00:00 GMT+0200",
-//     },
-//     {
-//         title: "33",
-//         date_start: "Mon Dec 5 2022 00:00:00 GMT+0200",
-//         date_end: "Sat Dec 7 2022 00:00:00 GMT+0200",
-//     },
-// ];
-
 function EventsArray(events, date) {
     return events.filter((item) => {
         return (
@@ -33,6 +15,7 @@ export default function Day({ day, rowIdx, events }) {
     const { setShowEventModal, setDaySelected, setIsCreateEvent } =
         useContext(GlobalContext);
 
+    console.log(events);
     function getCurrentDay() {
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
             ? "bg-skyblue text-white"

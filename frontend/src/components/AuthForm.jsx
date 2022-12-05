@@ -86,9 +86,15 @@ const AuthForm = () => {
                 ) : (
                     ""
                 )}
+
                 <button className="btn" id="login-btn">
-                    {pageType.slice(1)}
+                    {pageType === "/forgot" ? (
+                        "forgot"
+                    ) : (
+                        <>{pageType === "/register" ? "register" : "login"}</>
+                    )}
                 </button>
+
                 {pageType !== "/forgot" ? (
                     <div className="question-box">
                         <Link to="/forgot" className="reg-btn">

@@ -52,7 +52,7 @@ export const API = createApi({
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: ["Event"],
+            invalidatesTags: ["Event", "Calendar"],
         }),
         register: build.mutation({
             query: (data) => ({

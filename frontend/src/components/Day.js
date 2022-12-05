@@ -2,6 +2,12 @@ import dayjs from "dayjs";
 import React, { useContext } from "react";
 import GlobalContext from "../services/GlobalContext";
 
+const labelsClasses = [
+    { title: "Arrangement", color: "bg-indigo text-white" },
+    { title: "Reminder", color: "bg-green text-white" },
+    { title: "Task", color: "bg-blue text-white" },
+];
+
 function EventsArray(events, date) {
     return events.filter((item) => {
         return (
@@ -11,7 +17,16 @@ function EventsArray(events, date) {
     });
 }
 
-export default function Day({ day, rowIdx, events }) {
+function HolidaysArray(events, date) {
+    return events.filter((item) => {
+        return (
+            new Date(dayjs(item.date).set('year', 2022)).getTime() <= new Date(date).getTime() &&
+            new Date(date).getTime() <= new Date(dayjs(item.observed).set('year', 2022)).getTime()
+        );
+    });
+}
+
+export default function Day({ day, rowIdx, events, holidays }) {
     const {
         setShowEventModal,
         setDaySelected,
@@ -54,7 +69,7 @@ export default function Day({ day, rowIdx, events }) {
             {events &&
                 EventsArray(events, day).map((item, index) => (
                     <div
-                        className="event_item"
+                        className={`event_item ${labelsClasses.find(e => e.title == item.type).color}`}
                         key={index}
                         onClick={(e) => {
                             setDaySelected(day);
@@ -64,6 +79,15 @@ export default function Day({ day, rowIdx, events }) {
                         }}
                     >
                         {item.title}
+                    </div>
+                ))}
+            {holidays &&
+                HolidaysArray(holidays.events.holidays, day).map((item, index) => (
+                    <div
+                        className={`event_item bg-yellow`}
+                        key={index}
+                    >
+                        {item.name}
                     </div>
                 ))}
         </div>

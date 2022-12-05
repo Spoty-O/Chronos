@@ -113,7 +113,7 @@ class EventController {
 
     async delete_event(req, res, next) {
         try {
-            const { id } = req.params;
+            const { id, event_id } = req.query;
             const calendar = await Calendar.findOne({ where: { id } });
             if (!calendar) {
                 return next(ApiError.notFound("Calendar not found!"));

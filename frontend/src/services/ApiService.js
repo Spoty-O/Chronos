@@ -123,10 +123,20 @@ export const API = createApi({
             }),
             invalidatesTags: ["Event"],
         }),
+        getHolidays: build.query({
+            query: () => ({
+                url: `/event/holidays`,
+            }),
+            providesTags: (result) => [{ type: "Event" }],
+        }),
         deleteEvent: build.mutation({
             query: (data) => ({
-                url: `/event/${data.id}`,
+                url: `/event`,
                 method: "DELETE",
+                params: {
+                    id: data.id,
+                    event_id: data.event_id,
+                },
             }),
             invalidatesTags: ["Event"],
         }),

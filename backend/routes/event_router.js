@@ -8,6 +8,6 @@ router.get('/holidays', eventController.get_holidays);
 router.get('/link/:id', authMiddleware, eventController.get_create_link);
 router.post('/:id', authMiddleware, eventController.create_event);
 router.patch('/:id', authMiddleware, eventController.update_event);
-router.delete('/:id', authMiddleware, eventController.delete_event);
+router.delete('/', authMiddleware, eventController.delete_event);
 
 module.exports = router;

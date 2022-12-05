@@ -27,13 +27,15 @@ function EventsArray(events, arrangement, reminder, task) {
     });
 }
 
-function MonthComponent({ id, currentMonth, isArrangement, isReminder, isTask }) {
+function MonthComponent({ id, currentMonth, isHolidays, isArrangement, isReminder, isTask }) {
     // console.log(dayjs(currentMonth[0][0].$d).format())
     const { data: events, error } = API.useGetEventsQuery({
         id: id,
         date_start: dayjs(currentMonth[0][0].$d).format(),
         date_end: dayjs(currentMonth[4][6].$d).format(),
     });
+
+    const { data: holidays, error_holi } = API.useGetHolidaysQuery();
 
     return (
         <div className="flex flex-col flex-1">
@@ -43,7 +45,8 @@ function MonthComponent({ id, currentMonth, isArrangement, isReminder, isTask })
                 ))}
             </div>
             <div className="flex flex-col flex-1">
-                {events && <Month month={currentMonth} events={EventsArray(events, isArrangement, isReminder, isTask)} />}
+                {events && holidays && <Month month={currentMonth} events={EventsArray(events, isArrangement, isReminder, isTask)} holidays={isHolidays ? holidays : null} />}
+                {holidays && console.log(holidays)}
             </div>
         </div>
     );
@@ -51,7 +54,7 @@ function MonthComponent({ id, currentMonth, isArrangement, isReminder, isTask })
 
 export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(getMonth());
-    const { monthIndex, showEventModal, showCalendarModal, selectedCalendar, isArrangement, isReminder, isTask } =
+    const { monthIndex, showEventModal, showCalendarModal, selectedCalendar, isHolidays, isArrangement, isReminder, isTask } =
         useContext(GlobalContext);
 
     useEffect(() => {
@@ -73,6 +76,7 @@ export default function Calendar() {
                             isArrangement={isArrangement}
                             isReminder={isReminder}
                             isTask={isTask}
+                            isHolidays={isHolidays}
                         />
                     )}
                 </div>

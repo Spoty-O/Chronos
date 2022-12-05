@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const ApiError = require('../error/ApiError');
 const { Event, Calendar } = require('../models/models');
+const holidatAPI = require('holidayapi');
 
 class EventController {
     async get_events(req, res, next) {
@@ -20,6 +21,22 @@ class EventController {
                 }
             });
             return res.json(events);
+        } catch (error) {
+            console.log(error);
+            return next(ApiError.internal());
+        }
+    }
+
+    async get_holidays(req, res, next) {
+        try {
+            const holidayApi = new holidatAPI.HolidayAPI({ key: process.env.HOLIDAY_API_KEY });
+            const events = await holidayApi.holidays({
+                country: 'UA',
+                language: 'ru',
+                year: 2021
+            })
+            console.log(events);
+            return res.json({events});
         } catch (error) {
             console.log(error);
             return next(ApiError.internal());

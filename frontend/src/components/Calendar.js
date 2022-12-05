@@ -9,7 +9,25 @@ import CalendarModal from "./CalendarModal";
 import { API } from "../services/ApiService";
 import dayjs from "dayjs";
 
-function MonthComponent({ id, currentMonth }) {
+function EventsArray(events, arrangement, reminder, task) {
+    let arr = [];
+    if (arrangement) {
+        arr.push('Arrangement');
+    }
+    if (reminder) {
+        arr.push('Reminder');
+    }
+    if (task) {
+        arr.push('Task');
+    }
+    return events.filter((item) => {
+        return (
+            arr.includes(item.type)
+        );
+    });
+}
+
+function MonthComponent({ id, currentMonth, isArrangement, isReminder, isTask }) {
     // console.log(dayjs(currentMonth[0][0].$d).format())
     const { data: events, error } = API.useGetEventsQuery({
         id: id,
@@ -25,7 +43,7 @@ function MonthComponent({ id, currentMonth }) {
                 ))}
             </div>
             <div className="flex flex-col flex-1">
-                {events && <Month month={currentMonth} events={events} />}
+                {events && <Month month={currentMonth} events={EventsArray(events, isArrangement, isReminder, isTask)} />}
             </div>
         </div>
     );
@@ -33,7 +51,7 @@ function MonthComponent({ id, currentMonth }) {
 
 export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(getMonth());
-    const { monthIndex, showEventModal, showCalendarModal, selectedCalendar } =
+    const { monthIndex, showEventModal, showCalendarModal, selectedCalendar, isArrangement, isReminder, isTask } =
         useContext(GlobalContext);
 
     useEffect(() => {
@@ -52,6 +70,9 @@ export default function Calendar() {
                         <MonthComponent
                             id={selectedCalendar.id}
                             currentMonth={currentMonth}
+                            isArrangement={isArrangement}
+                            isReminder={isReminder}
+                            isTask={isTask}
                         />
                     )}
                 </div>

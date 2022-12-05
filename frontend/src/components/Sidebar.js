@@ -47,12 +47,11 @@ export default function Sidebar() {
                                 e.preventDefault();
                                 setSelectedCalendar(item);
                             }}
-                            className={`${
-                                selectedCalendar &&
-                                selectedCalendar.id === item.id
+                            className={`${selectedCalendar &&
+                                    selectedCalendar.id === item.id
                                     ? "active"
                                     : ""
-                            } list-item`}
+                                } list-item`}
                         >
                             <div className="flex-1 text-center">
                                 {item.title}
@@ -80,20 +79,21 @@ export default function Sidebar() {
                             type="checkbox"
                             className="event_checkbox"
                             name="holidays"
-                            // {isHolidays && checked}
+                            checked={isHolidays}
+                            onChange={() => {setIsHolidays(!isHolidays)}}
                         />
                         <span>Holidays</span>
                     </label>
                     <label className="label">
-                        <input type="checkbox" className="event_checkbox" />
+                        <input type="checkbox" className="event_checkbox" checked={isArrangement} onChange={() => { setIsArrangement(!isArrangement) }} />
                         <span>Arrangement</span>
                     </label>
                     <label className="label">
-                        <input type="checkbox" className="event_checkbox" />
+                        <input type="checkbox" className="event_checkbox" checked={isReminder} onChange={() => { setIsReminder(!isReminder) }} />
                         <span>Reminder</span>
                     </label>
                     <label className="label">
-                        <input type="checkbox" className="event_checkbox" />
+                        <input type="checkbox" className="event_checkbox" checked={isTask} onChange={() => { setIsTask(!isTask) }} />
                         <span>Task</span>
                     </label>
                 </div>

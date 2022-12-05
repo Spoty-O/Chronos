@@ -11,7 +11,7 @@ const labelsClasses = [
 function EventsArray(events, date) {
     return events.filter((item) => {
         return (
-            new Date(item.date_start).getTime() <= new Date(date).getTime() &&
+            new Date(item.date_start).getTime() <= new Date(dayjs(date).endOf("D")).getTime() &&
             new Date(date).getTime() <= new Date(item.date_end).getTime()
         );
     });

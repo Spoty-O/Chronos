@@ -6,7 +6,7 @@ export default function ShareCalendar() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [createCalendar, { error }] = API.useCreateCalendarMutation();
-
+    
     useEffect(() => {
         createCalendar({ id, data: {} });
         navigate("/main");

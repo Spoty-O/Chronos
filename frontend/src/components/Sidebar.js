@@ -30,6 +30,15 @@ export default function Sidebar() {
                     calendars.map((item, index) => (
                         <div
                             key={index}
+                            onContextMenu={(e) => {
+                                e.preventDefault();
+                                setShowCalendarModal(true);
+                                setSelectedCalendar(item);
+                            }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setSelectedCalendar(item);
+                            }}
                             className={`${
                                 selectedCalendar &&
                                 selectedCalendar.id === item.id
@@ -37,18 +46,11 @@ export default function Sidebar() {
                                     : ""
                             } list-item`}
                         >
-                            <div
-                                className="flex-1 text-center"
-                                onContextMenu={(e) => {
-                                    e.preventDefault();
-                                    setShowCalendarModal(true);
-                                    setSelectedCalendar(item);
-                                }}
-                                onClick={() => setSelectedCalendar(item)}
-                            >
+                            <div className="flex-1 text-center">
                                 {item.title}
                             </div>
                             <div
+                                className="edit cursor-pointer"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setShowCalendarModal(true);

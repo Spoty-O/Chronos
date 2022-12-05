@@ -15,6 +15,8 @@ const GlobalContext = React.createContext({
     setIsCreateCalendar: () => {},
     selectedCalendar: null,
     setSelectedCalendar: () => {},
+    isCreateEvent: false,
+    setIsCreateEvent: () => {},
 });
 
 export default GlobalContext;

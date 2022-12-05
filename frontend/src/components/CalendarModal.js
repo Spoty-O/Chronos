@@ -52,7 +52,6 @@ export default function CalendarModal() {
         setIsCreateCalendar,
     } = useContext(GlobalContext);
 
-    // console.log(isCreateCalendar, selectedCalendar);
     const [title, setTitle] = useState(
         selectedCalendar ? selectedCalendar.title : ""
     );
@@ -67,13 +66,13 @@ export default function CalendarModal() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let data = new FormData(e.currentTarget);
         if (isCreateCalendar) {
-            await createCalendar(new FormData(e.target));
+            await createCalendar({data});
         } else {
-            console.log(selectedCalendar.id);
             await updateCalendar({
                 id: selectedCalendar.id,
-                data: new FormData(e.target),
+                data: data,
             });
         }
     };
@@ -95,6 +94,7 @@ export default function CalendarModal() {
                 <header className="bg-gray flex justify-between items-center pxy-15">
                     <span>Calendar</span>
                     <span
+                        className="cursor-pointer"
                         onClick={() => {
                             setShowCalendarModal(false);
                             setIsCreateCalendar(false);
@@ -126,7 +126,7 @@ export default function CalendarModal() {
                             </button>
                         </div>
                     ) : (
-                        <button className="button">save</button>
+                        <button className="button">create</button>
                     )}
                     {createCalendarData && (
                         <span style={{ color: "green" }}>

@@ -6,8 +6,13 @@ import { logOut } from "../services/AuthSlice";
 import GlobalContext from "../services/GlobalContext";
 
 export default function Header() {
-    const { monthIndex, setMonthIndex, selectedCalendar } =
-        useContext(GlobalContext);
+    const {
+        monthIndex,
+        setMonthIndex,
+        selectedCalendar,
+        setShowEventModal,
+        setIsCreateEvent,
+    } = useContext(GlobalContext);
     const dispatch = useDispatch();
 
     const [logoutUser] = API.useLogoutUserMutation();
@@ -52,6 +57,15 @@ export default function Header() {
                             "MMMM YYYY"
                         )}
                     </h3>
+                    <button
+                        className="button"
+                        onClick={(e) => {
+                            setShowEventModal(true);
+                            setIsCreateEvent(true);
+                        }}
+                    >
+                        Create event
+                    </button>
                 </div>
             )}
             <button className="button" onClick={logoutFunc}>

@@ -19,6 +19,7 @@ export default function EventModal() {
         isCreateEvent,
         setIsCreateEvent,
         setSelectedEvent,
+        setDaySelected,
     } = useContext(GlobalContext);
 
     const [createEvent, { error: createEventError }] =
@@ -97,6 +98,7 @@ export default function EventModal() {
                             setShowEventModal(false);
                             setIsCreateEvent(false);
                             setSelectedEvent(null);
+                            setDaySelected(null)
                         }}
                     >
                         close
